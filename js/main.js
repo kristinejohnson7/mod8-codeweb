@@ -163,7 +163,7 @@ const createCards = () => {
   const cards = cardArr
     .map(
       ({ item, open, img, alt, subheader, h3 }) =>
-        ` <div class="portfolio-card" data-item="${item}" data-open="${open}" onclick="openCardModal(${open})">
+        ` <div class="portfolio-card" data-item="${item}" data-open="${open}">
             <div class="card-body">
               <img src="${img}" alt="${alt}" />
               <div class="card-popup-box">
@@ -186,39 +186,37 @@ createCards();
 const modalContainer = document.querySelector(".popup-modal-container");
 
 const openCardModal = (open) => {
+  const card = modalCardArr.map((card) => card.id).indexOf(open);
   const cardIndex = modalCardArr.map((card) => card.id).indexOf(open);
 
-  const oneCard = modalCardArr[cardIndex]
-    .map(
-      ({ id, header, img, txtHeader, txtBody }) =>
-        `  <div id="${id}" class="modal" data-animation="slideInOutTop">
+  const newCard = modalCardArr[card];
+
+  const oneCard = `  <div id="${newCard.id}" class="modal" data-animation="slideInOutTop">
               <div class="modal-dialog">
                 <header class="modal-header">
-                  <h3>${header}</h3>
+                  <h3>${newCard.header}</h3>
                   <i class="fas fa-times" data-close></i>
                 </header>
                 <div class="modal-body">
                   <div class="img-wrapper">
                     <img
-                      src=".${img}"
+                      src=".${newCard.img}"
                       alt="portfolio image"
                     />
                   </div>
                   <div class="text-wrapper">
-                    <p><strong>${txtHeader}</strong></p>
+                    <p><strong>${newCard.txtHeader}</strong></p>
                     <p>
-                      ${txtBody}
+                      ${newCard.txtBody}
                     </p>
                     <p>
-                      ${txtBody}
+                      ${newCard.txtBody}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-    `
-    )
-    .join("");
+    `;
   modalContainer.innerHTML = oneCard;
 };
 
@@ -312,8 +310,9 @@ searchBox.addEventListener("keyup", (e) => {
 //Modal/Full Site Modal "open buttons"
 for (const elm of openModal) {
   elm.addEventListener("click", function () {
+    openCardModal(this.dataset.open);
     const modalId = this.dataset.open;
-    // document.getElementById(modalId).classList.add(isVisible);
+    document.getElementById(modalId).classList.add(isVisible);
   });
 }
 
